@@ -3,6 +3,8 @@ import { KeyboardAvoidingView, Text, View, StyleSheet, Alert } from 'react-nativ
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
 import { useAuth } from '../components/AuthContext'
 import { AntDesign } from '@expo/vector-icons';
+import { Platform } from 'react-native';
+import { TextInputWithTitle } from '../components/TextInputWithTitle';
 
 const createTwoButtonAlert = () =>
     Alert.alert(
@@ -22,15 +24,15 @@ const SignIn = ({ navigation }) => {
     async function handleLogIn() {
         try {
             const response = await logIn({ email, password })
-            if (!response) 
+            if (!response)
                 createTwoButtonAlert()
-            
+
         } catch (error) {
-            console.log(error);
+            createTwoButtonAlert(error.response.data.error)
         }
     }
 
-    function navigateSignUp(){
+    function navigateSignUp() {
         navigation.navigate('SignUp')
     }
 
@@ -47,26 +49,20 @@ const SignIn = ({ navigation }) => {
                 <Text style={styles.textTitle}>Login</Text>
             </View>
 
-            <KeyboardAvoidingView behavior="position" style={styles.formContainer}>
-                <Text style={styles.textFieldTitle}>Email</Text>
-                <TextInput
-                    style={styles.textField}
-                    placeholder='Digite aqui...'
-                    onChangeText={setEmail}
+            <KeyboardAvoidingView
+                behavior={Platform.Os == "ios" ? "padding" : "position"}
+                style={styles.formContainer}
+            >
+                <TextInputWithTitle
+                    title='Email'
+                    setValue={setEmail}
                     value={email}
-                    placeholderTextColor="#a0a0a5"
-                    selectionColor='#c0c0c5'
-                    autoCorrect={false}
                     keyboardType={'email-address'}
                 />
-                <Text style={styles.textFieldTitle}>Senha</Text>
-                <TextInput
-                    style={styles.textField}
-                    placeholder='Digite aqui...'
-                    onChangeText={setPassword}
+                <TextInputWithTitle
+                    title='Senha'
+                    setValue={setPassword}
                     value={password}
-                    placeholderTextColor="#a0a0a5"
-                    selectionColor='#c0c0c5'
                     secureTextEntry={true}
                 />
                 <TouchableOpacity style={styles.formButtom} onPress={handleLogIn}>
@@ -104,9 +100,9 @@ const styles = StyleSheet.create({
     },
     formContainer: {
         margin: 50,
-        maxWidth: 700,
-        marginTop: 250,
-        marginBottom: 50
+        marginTop: '110%',
+        position: 'absolute',
+        width: '70%'
     },
     navContainer: {
         margin: 30,
@@ -119,24 +115,6 @@ const styles = StyleSheet.create({
         textAlign: 'left',
         lineHeight: 24,
         paddingLeft: 10
-    },
-    textFieldTitle: {
-        color: '#fff',
-        fontWeight: 'bold',
-        fontSize: 18,
-        textAlign: 'left',
-        lineHeight: 24,
-    },
-    textField: {
-        height: 40,
-        backgroundColor: '#006053',
-        borderRadius: 3,
-        marginBottom: 8,
-        paddingHorizontal: 12,
-        fontSize: 16,
-        marginTop: 5,
-        color: '#e0e0e5',
-        fontFamily: 'Roboto'
     },
     textTitle: {
         color: '#fff',

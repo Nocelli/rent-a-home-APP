@@ -6,6 +6,16 @@ export async function logIn(user) {
         return response
     } 
     catch (error) {
-        
+        return error
+    }
+}
+
+export async function SingUp(user) {
+    try {
+        const response = await api.post('/register', user)
+        return response
+    } 
+    catch (error) {
+        return error
     }
 }

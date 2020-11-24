@@ -34,7 +34,21 @@ export const AuthProvider = ({ children }) => {
     setUser(response.data.user)
     api.defaults.headers['x-token'] = response.headers['x-token']
 
-    await AsyncStorage.setItem('Auth:user', JSON.stringify(response.user))
+    await AsyncStorage.setItem('Auth:user', JSON.stringify(response.data.user))
+    await AsyncStorage.setItem('Auth:token', response.headers['x-token'])
+    return response
+  }
+
+  async function signUp(user) {
+    const response = await auth.SingUp(user)
+
+    if(!response || !response.data)
+      return response
+
+    setUser(response.data.user)
+    api.defaults.headers['x-token'] = response.headers['x-token']
+
+    await AsyncStorage.setItem('Auth:user', JSON.stringify(response.data.user))
     await AsyncStorage.setItem('Auth:token', response.headers['x-token'])
     return response
   }
@@ -45,7 +59,7 @@ export const AuthProvider = ({ children }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ signed: !!user, user, logIn, logOut, loading }}>
+    <AuthContext.Provider value={{ signed: !!user, user, logIn, logOut, signUp, loading }}>
       {children}
     </AuthContext.Provider>
   )
