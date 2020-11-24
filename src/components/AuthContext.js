@@ -27,11 +27,16 @@ export const AuthProvider = ({ children }) => {
 
   async function logIn(user) {
     const response = await auth.logIn(user)
+
+    if(!response || !response.data)
+      return response
+
     setUser(response.data.user)
     api.defaults.headers['x-token'] = response.headers['x-token']
 
     await AsyncStorage.setItem('Auth:user', JSON.stringify(response.user))
     await AsyncStorage.setItem('Auth:token', response.headers['x-token'])
+    return response
   }
 
   async function logOut() {
