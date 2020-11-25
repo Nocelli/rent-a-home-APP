@@ -1,27 +1,19 @@
 import React, { useState } from 'react'
-import { StyleSheet, View, Alert } from 'react-native'
+import { StyleSheet, View, Text } from 'react-native'
 import { TextInputWithTitle } from '../components/TextInputWithTitle'
 import { DatePicker } from '../components/DatePicker'
 import { ListingTypeSelect } from '../components/ListingTypeSelect'
 import { ScrollView } from 'react-native-gesture-handler'
 import { FormButtom } from '../components/FormButtom'
+import { createAlert } from '../utils/createAlert'
 import api from '../services/api'
-
-const createAlert = (msg, title) =>
-    Alert.alert(
-        (title ? title : "Erro ao criar anúncio"),
-        msg,
-        [
-            { text: "OK" }
-        ]
-    )
 
 const CreateListing = () => {
 
     const [isLoading, setIsLoading] = useState(false)
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
-    const [price, setPrice] = useState(0)
+    const [price, setPrice] = useState('')
     const [whatsapp, setWhatsapp] = useState('')
     const [available, setAvailable] = useState(new Date(Date.now()))
     const [listingType, setListingType] = useState('home')
@@ -33,7 +25,7 @@ const CreateListing = () => {
         }
         try {
             const response = await api.post('/listings', { title, description, price, whatsapp, available, listingType })
-            if (!response){
+            if (!response) {
                 createAlert('Tente novamente mais tarde')
                 return
             }
@@ -44,13 +36,14 @@ const CreateListing = () => {
             setWhatsapp('')
             setListingType('home')
         } catch (error) {
+            console.log(error);
             createAlert(error.response.data.error)
         }
     }
 
-    function handleCreateListing() {
+    async function handleCreateListing() {
         setIsLoading(true)
-        handlePostToAPI()
+        await handlePostToAPI()
         setIsLoading(false)
     }
 
@@ -59,17 +52,23 @@ const CreateListing = () => {
         <View style={styles.contentContainer}>
             <View style={styles.blobLeft} opacity={0.9} />
             <View style={styles.blobRight} />
-            <ScrollView style={styles.scrollView}>
-                <View style={styles.formContainer}>
-                    <TextInputWithTitle title='Título' value={title} setValue={setTitle} styleInput={styles.textField} placeholderTextColor={'#ffffff88'} />
-                    <TextInputWithTitle title='Descrição' value={description} setValue={setDescription} styleInput={styles.textField} placeholderTextColor={'#ffffff88'} />
-                    <TextInputWithTitle title='Preço' value={price} setValue={setPrice} keyboardType={'numeric'} styleInput={styles.textField} placeholderTextColor={'#ffffff88'} />
-                    <TextInputWithTitle title='WhatsApp' value={whatsapp} setValue={setWhatsapp} keyboardType={'phone-pad'} styleInput={styles.textField} placeholderTextColor={'#ffffff88'} />
-                    <DatePicker date={available} setDate={setAvailable} />
-                    <ListingTypeSelect listingType={listingType} setListingType={setListingType} />
-                    <FormButtom callback={handleCreateListing} title={'Criar anúncio'} isLoading={isLoading} />
-                </View>
-            </ScrollView>
+            {
+                isLoading ?
+                    <Text style={styles.loading}>Criando anúncio...</Text> :
+                    <>
+                        <ScrollView style={styles.scrollView}>
+                            <View style={styles.formContainer}>
+                                <TextInputWithTitle title='Título' value={title} setValue={setTitle} styleInput={styles.textField} placeholderTextColor={'#ffffff88'} />
+                                <TextInputWithTitle title='Descrição' value={description} setValue={setDescription} styleInput={styles.textField} placeholderTextColor={'#ffffff88'} />
+                                <TextInputWithTitle title='Preço' value={price ? price.toString() : ''} setValue={setPrice} keyboardType={'numeric'} styleInput={styles.textField} placeholderTextColor={'#ffffff88'} />
+                                <TextInputWithTitle title='WhatsApp' value={whatsapp} setValue={setWhatsapp} keyboardType={'phone-pad'} styleInput={styles.textField} placeholderTextColor={'#ffffff88'} />
+                                <DatePicker date={available} setDate={setAvailable} />
+                                <ListingTypeSelect listingType={listingType} setListingType={setListingType} />
+                                <FormButtom callback={handleCreateListing} title={'Criar anúncio'} isLoading={isLoading} />
+                            </View>
+                        </ScrollView>
+                    </>
+            }
         </View>
 
     )
@@ -120,7 +119,17 @@ const styles = StyleSheet.create({
         color: '#333',
         fontWeight: "bold",
         fontFamily: 'Roboto'
-    }
+    },
+    loading: {
+        alignSelf: "center",
+        color: '#333',
+        fontSize: 22,
+        fontWeight: "bold",
+        marginTop: 100,
+        borderRadius: 2,
+        padding: 30,
+        backgroundColor: '#ffffffaa'
+    },
 });
 
 export default CreateListing

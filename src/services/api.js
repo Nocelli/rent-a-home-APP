@@ -2,7 +2,7 @@ import axios from 'axios'
 import { AsyncStorage } from 'react-native'
 
 const api = axios.create({
-    baseURL: "https://black-cheetah-11.loca.lt/"
+    baseURL: "https://afraid-mouse-52.loca.lt"
 })
 
 api.interceptors.response.use(async function (response) {

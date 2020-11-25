@@ -3,6 +3,7 @@ import { View, TouchableOpacity, StyleSheet, Text } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 export const DatePicker = ({ setDate, date }) => {
+    const avaiability = new Date(date)
     const [show, setShow] = useState(false);
 
     const onChange = (event, selectedDate) => {
@@ -18,7 +19,7 @@ export const DatePicker = ({ setDate, date }) => {
     return (
         <View>
             <View>
-                <Text style={styles.dateText} >{date.toLocaleDateString().split('/')[1] + '/' + date.toLocaleDateString().split('/')[0] + '/' + date.toLocaleDateString().split('/')[2]}</Text>
+                <Text style={styles.dateText} >{avaiability.toLocaleDateString().split('/')[1] + '/' + avaiability.toLocaleDateString().split('/')[0] + '/' + avaiability.toLocaleDateString().split('/')[2]}</Text>
                 <TouchableOpacity style={styles.formButtom} onPress={showDatepicker}>
                     <Text style={styles.formButtomText}>{'Disponibilidade do imóvel'}</Text>
                 </TouchableOpacity>
@@ -27,7 +28,7 @@ export const DatePicker = ({ setDate, date }) => {
                 <DateTimePicker
                     minimumDate={Date.now()}
                     testID="dateTimePicker"
-                    value={date}
+                    value={avaiability}
                     is24Hour={true}
                     display="default"
                     onChange={onChange}

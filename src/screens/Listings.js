@@ -1,20 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { View, StyleSheet, Text, Alert } from 'react-native'
+import { View, StyleSheet, Text } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler'
 import { renderListingItem } from '../components/ListingItem'
+import { createAlert } from '../utils/createAlert'
 import api from '../services/api'
 
-
-const createAlert = (msg, title) =>
-    Alert.alert(
-        (title ? title : "Erro ao recuperar anúncios"),
-        msg,
-        [
-            { text: "OK" }
-        ]
-    )
-
-const Listings = () => {
+const Listings = ({ navigation }) => {
 
     const [listings, setListings] = useState([])
     const [isLoading, setIsLoading] = useState(false)
@@ -34,10 +25,24 @@ const Listings = () => {
         }
     }
 
-    useEffect(() => {
+    async function getListings() {
         setIsLoading(true)
-        handleGetListings().then(() => setIsLoading(false))
+        await handleGetListings()
+        setIsLoading(false)
+    }
+
+    useEffect(() => {
+        getListings()
     }, [])
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            if (!isLoading)
+                getListings()
+        })
+
+        return unsubscribe
+    }, [navigation])
 
     return (
         <View style={styles.contentContainer}>

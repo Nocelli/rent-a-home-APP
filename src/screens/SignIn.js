@@ -1,19 +1,11 @@
 import React, { useState } from 'react'
-import { KeyboardAvoidingView, Text, View, StyleSheet, Alert } from 'react-native'
-import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
+import { KeyboardAvoidingView, Text, View, StyleSheet } from 'react-native'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 import { useAuth } from '../components/AuthContext'
 import { AntDesign } from '@expo/vector-icons';
 import { Platform } from 'react-native';
+import { createAlert } from '../utils/createAlert'
 import { TextInputWithTitle } from '../components/TextInputWithTitle';
-
-const createTwoButtonAlert = () =>
-    Alert.alert(
-        "Erro ao logar",
-        "Senha ou email incorreto!",
-        [
-            { text: "OK" }
-        ]
-    )
 
 
 const SignIn = ({ navigation }) => {
@@ -25,10 +17,10 @@ const SignIn = ({ navigation }) => {
         try {
             const response = await logIn({ email, password })
             if (!response)
-                createTwoButtonAlert()
+                createAlert("Erro ao logar","Senha ou email incorreto!")
 
         } catch (error) {
-            createTwoButtonAlert(error.response.data.error)
+            createAlert(error.response.data.error)
         }
     }
 

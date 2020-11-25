@@ -13,7 +13,7 @@ function getIcon(listingType) {
         return <Ionicons name={'md-planet'} size={52} color={'#003932'} />
 }
 
-export const ListingItem = ({ title, description, price, listingType, available, whatsapp, children }) => {
+export const ListingItem = ({ title, description, price, listingType, available, whatsapp, children, user }) => {
 
     function sendWhatsapp() {
         const message = `Olá estou interessado em ${title}`
@@ -23,6 +23,7 @@ export const ListingItem = ({ title, description, price, listingType, available,
 
     return (
         <View style={styles.contentContainer}>
+            {children}
             <View style={styles.titleContainer}>
                 {getIcon(listingType)}
                 <Text style={styles.titleText}>{title}</Text>
@@ -30,9 +31,10 @@ export const ListingItem = ({ title, description, price, listingType, available,
             <Text style={styles.descriptionText}>{description}</Text>
             <View style={styles.extrainfoContainer}>
                 <Text style={styles.availableText}>Disponível a partir de: {date.toLocaleDateString().split('/')[1] + '/' + date.toLocaleDateString().split('/')[0] + '/' + date.toLocaleDateString().split('/')[2]}</Text>
+                <Text style={styles.availableText}>Anúncio por: {user.name}</Text>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <Text style={styles.priceText}>Valor: </Text>
-                    <Text style={styles.priceNumberText}>R$ {(price).toFixed(2).replace('.',',')}
+                    <Text style={styles.priceNumberText}>R$ {(price | 0).toFixed(2).replace('.', ',')}
                     </Text>
                 </View>
             </View>
@@ -40,20 +42,21 @@ export const ListingItem = ({ title, description, price, listingType, available,
                 <Ionicons name="logo-whatsapp" size={42} color="#25D366" />
                 <Text style={styles.whatsappNumber}>{whatsapp}</Text>
             </TouchableOpacity>
-            {children}
         </View>
     )
 }
 
 export function renderListingItem({ item }) {
+
     return (<ListingItem
-        key={item.imdbID}
+        key={item._id}
         title={item.title}
         description={item.description}
         price={item.price}
         listingType={item.listingType}
         available={item.available}
         whatsapp={item.whatsapp}
+        user={item.user}
     />)
 }
 

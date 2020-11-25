@@ -1,19 +1,10 @@
 import React, { useState } from 'react'
-import { KeyboardAvoidingView, Text, View, StyleSheet, Alert } from 'react-native'
+import { KeyboardAvoidingView, Text, View, StyleSheet } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { TextInputWithTitle } from '../components/TextInputWithTitle'
 import { AntDesign } from '@expo/vector-icons';
 import { useAuth } from '../components/AuthContext';
-
-const createTwoButtonAlert = (msg) =>
-    Alert.alert(
-        "Erro ao cadastrar",
-        msg,
-        [
-            { text: "OK" }
-        ]
-    )
-
+import { createAlert } from '../utils/createAlert'
 
 const SignUp = ({ navigation }) => {
     const [email, setEmail] = useState('')
@@ -27,15 +18,15 @@ const SignUp = ({ navigation }) => {
             if(password == passwordConfirmation){
                 const response = await signUp({name,email,password})
                 if (!response)
-                    createTwoButtonAlert('Tente novamente em alguns minutos!')
+                    createAlert()
             }
             else{
-                createTwoButtonAlert('As senhas não são iguais')
+                createAlert('As senhas não são iguais', "Erro ao cadastrar")
             }
             
 
         } catch (error) {
-            createTwoButtonAlert(error.response.data.error)
+            createAlert(error.response.data.error)
         }
     }
 
