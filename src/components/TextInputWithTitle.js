@@ -3,7 +3,7 @@ import { Text, TextInput, StyleSheet } from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 
-export const TextInputWithTitle = ({ styleTitle, styleInput, title, setValue, value, keyboardType, placeholder, secureTextEntry }) => {
+export const TextInputWithTitle = ({ styleTitle, styleInput, title, setValue, value, keyboardType, placeholder, secureTextEntry, placeholderTextColor }) => {
 
     const inputRef = useRef(null)
 
@@ -20,7 +20,7 @@ export const TextInputWithTitle = ({ styleTitle, styleInput, title, setValue, va
                 placeholder={placeholder ? placeholder : 'Digite aqui...'}
                 onChangeText={setValue}
                 value={value}
-                placeholderTextColor="#a0a0a5"
+                placeholderTextColor={placeholderTextColor ? placeholderTextColor : "#a0a0a5"}
                 selectionColor='#c0c0c5'
                 keyboardType={keyboardType ? keyboardType : 'default'}
                 secureTextEntry={secureTextEntry}

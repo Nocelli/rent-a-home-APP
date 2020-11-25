@@ -3,7 +3,6 @@ import { KeyboardAvoidingView, Text, View, StyleSheet, Alert } from 'react-nativ
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { TextInputWithTitle } from '../components/TextInputWithTitle'
 import { AntDesign } from '@expo/vector-icons';
-import api from '../services/api';
 import { useAuth } from '../components/AuthContext';
 
 const createTwoButtonAlert = (msg) =>

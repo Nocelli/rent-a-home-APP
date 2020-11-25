@@ -4,7 +4,7 @@ import { Center } from '../components/Center'
 import { useAuth } from '../components/AuthContext'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 
-const Dashboard = () => {
+const Listings = () => {
     const { logOut } = useAuth()
 
     async function handleLogOut() {
@@ -18,11 +18,11 @@ const Dashboard = () => {
             </Text>
             <TouchableOpacity onPress={handleLogOut}>
                 <Text>
-                    Deslogar
+                    Listings
                 </Text>
             </TouchableOpacity>
         </Center>
     )
 }
 
-export default Dashboard
+export default Listings
